@@ -222,7 +222,13 @@ def test_range_index_union():
         ),
         pd.Index,
     )
-
+    check(
+        assert_type(
+            pd.RangeIndex(range(10)).union([11, 12, 13]),
+            Union[pd.Index, _IntIndexType, pd.RangeIndex],
+        ),
+        pd.Index,
+    )
 
 def test_interval_range():
     check(
@@ -885,6 +891,11 @@ def test_getitem() -> None:
     check(assert_type(iri, pd.RangeIndex), pd.RangeIndex, int)
     check(assert_type(iri[0], int), int)
     check(assert_type(iri[[0, 2, 4]], pd.Index), pd.Index, np.int64)
+
+    jkl = pd.RangeIndex(range(10))
+    check(assert_type(jkl, pd.RangeIndex), pd.RangeIndex, int)
+    check(assert_type(jkl[0], int), int)
+    check(assert_type(jkl[[0, 2, 4]], pd.Index), pd.Index, np.int64)
 
     mi = pd.MultiIndex.from_product([["a", "b"], ["c", "d"]], names=["ab", "cd"])
     check(assert_type(mi, pd.MultiIndex), pd.MultiIndex)
