@@ -2677,3 +2677,41 @@ def test_convert_dtypes_dtype_backend() -> None:
     df = pd.DataFrame({"A": [1, 2, 3, 4], "B": [3, 4, 5, 6]})
     dfn = df.convert_dtypes(dtype_backend="numpy_nullable")
     check(assert_type(dfn, pd.DataFrame), pd.DataFrame)
+
+
+def test_to_json_mode() -> None:
+    df = pd.DataFrame(
+        [["a", "b"], ["c", "d"]],
+        index=["row 1", "row 2"],
+        columns=["col 1", "col 2"],
+    )
+    result = df.to_json(orient="records", lines=True, mode="a")
+    result1 = df.to_json(orient="split", mode="w")
+    result2 = df.to_json(orient="columns", mode="w")
+    result4 = df.to_json(orient="records", mode="w")
+    check(assert_type(result, str), str)
+    check(assert_type(result1, str), str)
+    check(assert_type(result2, str), str)
+    check(assert_type(result4, str), str)
+    if TYPE_CHECKING_INVALID_USAGE:
+        result3 = df.to_json(orient="records", lines=False, mode="a")  # type: ignore[call-overload] # pyright: ignore[reportGeneralTypeIssues]
+
+
+def test_interpolate_inplace() -> None:
+    # GH 691
+    df = pd.DataFrame({"a": range(3)})
+    check(assert_type(df.interpolate(method="linear"), pd.DataFrame), pd.DataFrame)
+    check(
+        assert_type(df.interpolate(method="linear", inplace=False), pd.DataFrame),
+        pd.DataFrame,
+    )
+    check(assert_type(df.interpolate(method="linear", inplace=True), None), type(None))
+
+
+def test_groupby_fillna_inplace() -> None:
+    # GH 691
+    groupby = pd.DataFrame({"a": range(3), "b": range(3)}).groupby("a")
+    check(assert_type(groupby.fillna(0), pd.DataFrame), pd.DataFrame)
+    check(assert_type(groupby.fillna(0, inplace=False), pd.DataFrame), pd.DataFrame)
+    if TYPE_CHECKING_INVALID_USAGE:
+        groupby.fillna(0, inplace=True)  # type: ignore[arg-type] # pyright: ignore[reportGeneralTypeIssues]

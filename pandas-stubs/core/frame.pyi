@@ -1018,7 +1018,7 @@ class DataFrame(NDFrame, OpsMixin):
         dropna: _bool = ...,
     ) -> DataFrameGroupBy[Scalar]: ...
     @overload
-    def groupby(  # type: ignore[misc]  # pyright: ignore[reportOverlappingOverload]
+    def groupby(
         self,
         by: DatetimeIndex,
         axis: Axis = ...,
@@ -1031,7 +1031,7 @@ class DataFrame(NDFrame, OpsMixin):
         dropna: _bool = ...,
     ) -> DataFrameGroupBy[Timestamp]: ...
     @overload
-    def groupby(  # type: ignore[misc]
+    def groupby(
         self,
         by: TimedeltaIndex,
         axis: Axis = ...,
@@ -1044,7 +1044,7 @@ class DataFrame(NDFrame, OpsMixin):
         dropna: _bool = ...,
     ) -> DataFrameGroupBy[Timedelta]: ...
     @overload
-    def groupby(  # type: ignore[misc]
+    def groupby(
         self,
         by: PeriodIndex,
         axis: Axis = ...,
@@ -1057,7 +1057,7 @@ class DataFrame(NDFrame, OpsMixin):
         dropna: _bool = ...,
     ) -> DataFrameGroupBy[Period]: ...
     @overload
-    def groupby(  # type: ignore[misc]
+    def groupby(
         self,
         by: IntervalIndex[IntervalT],
         axis: Axis = ...,
@@ -1072,7 +1072,7 @@ class DataFrame(NDFrame, OpsMixin):
     @overload
     def groupby(
         self,
-        by: MultiIndex,
+        by: MultiIndex | GroupByObjectNonScalar | None = ...,
         axis: Axis = ...,
         level: Level | None = ...,
         as_index: _bool = ...,
@@ -1095,19 +1095,6 @@ class DataFrame(NDFrame, OpsMixin):
         observed: _bool = ...,
         dropna: _bool = ...,
     ) -> DataFrameGroupBy[Any]: ...
-    @overload
-    def groupby(
-        self,
-        by: GroupByObjectNonScalar | None = ...,
-        axis: Axis = ...,
-        level: Level | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        squeeze: _bool = ...,
-        observed: _bool = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[tuple]: ...
     def pivot(
         self,
         *,
@@ -1721,7 +1708,7 @@ class DataFrame(NDFrame, OpsMixin):
         limit_direction: Literal["forward", "backward", "both"] = ...,
         limit_area: Literal["inside", "outside"] | None = ...,
         downcast: Literal["infer"] | None = ...,
-        inplace: Literal[False],
+        inplace: Literal[False] = ...,
         **kwargs,
     ) -> DataFrame: ...
     @overload
@@ -1968,7 +1955,7 @@ class DataFrame(NDFrame, OpsMixin):
     @overload
     def rolling(
         self,
-        window: int | str | BaseOffset | BaseIndexer,
+        window: int | str | _dt.timedelta | BaseOffset | BaseIndexer,
         min_periods: int | None = ...,
         center: _bool = ...,
         on: Hashable | None = ...,
@@ -1982,7 +1969,7 @@ class DataFrame(NDFrame, OpsMixin):
     @overload
     def rolling(
         self,
-        window: int | str | BaseOffset | BaseIndexer,
+        window: int | str | _dt.timedelta | BaseOffset | BaseIndexer,
         min_periods: int | None = ...,
         center: _bool = ...,
         on: Hashable | None = ...,
@@ -2095,18 +2082,38 @@ class DataFrame(NDFrame, OpsMixin):
     def to_json(
         self,
         path_or_buf: FilePath | WriteBuffer[str],
-        orient: JsonFrameOrient | None = ...,
+        *,
+        orient: Literal["records"],
         date_format: Literal["epoch", "iso"] | None = ...,
         double_precision: int = ...,
         force_ascii: _bool = ...,
         date_unit: Literal["s", "ms", "us", "ns"] = ...,
         default_handler: Callable[[Any], _str | float | _bool | list | dict]
         | None = ...,
-        lines: _bool = ...,
+        lines: Literal[True],
         compression: CompressionOptions = ...,
         index: _bool = ...,
         indent: int | None = ...,
+        mode: Literal["a"],
     ) -> None: ...
+    @overload
+    def to_json(
+        self,
+        path_or_buf: None = ...,
+        *,
+        orient: Literal["records"],
+        date_format: Literal["epoch", "iso"] | None = ...,
+        double_precision: int = ...,
+        force_ascii: _bool = ...,
+        date_unit: Literal["s", "ms", "us", "ns"] = ...,
+        default_handler: Callable[[Any], _str | float | _bool | list | dict]
+        | None = ...,
+        lines: Literal[True],
+        compression: CompressionOptions = ...,
+        index: _bool = ...,
+        indent: int | None = ...,
+        mode: Literal["a"],
+    ) -> _str: ...
     @overload
     def to_json(
         self,
@@ -2122,7 +2129,25 @@ class DataFrame(NDFrame, OpsMixin):
         compression: CompressionOptions = ...,
         index: _bool = ...,
         indent: int | None = ...,
+        mode: Literal["w"] = ...,
     ) -> _str: ...
+    @overload
+    def to_json(
+        self,
+        path_or_buf: FilePath | WriteBuffer[str],
+        orient: JsonFrameOrient | None = ...,
+        date_format: Literal["epoch", "iso"] | None = ...,
+        double_precision: int = ...,
+        force_ascii: _bool = ...,
+        date_unit: Literal["s", "ms", "us", "ns"] = ...,
+        default_handler: Callable[[Any], _str | float | _bool | list | dict]
+        | None = ...,
+        lines: _bool = ...,
+        compression: CompressionOptions = ...,
+        index: _bool = ...,
+        indent: int | None = ...,
+        mode: Literal["w"] = ...,
+    ) -> None: ...
     @overload
     def to_string(
         self,

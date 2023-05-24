@@ -16,11 +16,10 @@ import numpy as np
 from pandas.core.indexes.datetimes import DatetimeIndex
 from typing_extensions import Self
 
+from pandas._libs.tslibs.timedeltas import Timedelta
 from pandas._typing import npt
 
 from pandas.tseries.holiday import AbstractHolidayCalendar
-
-from .timedeltas import Timedelta
 
 _DatetimeT = TypeVar("_DatetimeT", bound=date)
 _TimedeltaT = TypeVar("_TimedeltaT", bound=timedelta)
@@ -179,7 +178,11 @@ class Week(SingleConstructorOffset):
         self, n: int = ..., normalize: bool = ..., weekday: int | None = ...
     ) -> None: ...
 
-class WeekOfMonth(WeekOfMonthMixin): ...
+class WeekOfMonth(WeekOfMonthMixin):
+    def __init__(
+        self, n: int = ..., normalize: bool = ..., week: int = ..., weekday: int = ...
+    ) -> None: ...
+
 class LastWeekOfMonth(WeekOfMonthMixin): ...
 
 class FY5253Mixin(SingleConstructorOffset):
@@ -265,9 +268,6 @@ CDay = CustomBusinessDay
 def roll_qtrday(
     other: datetime, n: int, month: int, day_opt: str, modby: int
 ) -> int: ...
-
-INVALID_FREQ_ERR_MSG: Literal["Invalid frequency: {0}"]
-
 def shift_months(
     dtindex: npt.NDArray[np.int64], months: int, day_opt: str | None = ...
 ) -> npt.NDArray[np.int64]: ...
