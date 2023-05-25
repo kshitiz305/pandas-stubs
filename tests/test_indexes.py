@@ -230,6 +230,7 @@ def test_range_index_union():
         pd.Index,
     )
 
+
 def test_interval_range():
     check(
         assert_type(pd.interval_range(0, 10), "pd.IntervalIndex[pd.Interval[int]]"),
