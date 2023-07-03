@@ -16,7 +16,7 @@ from pandas._typing import (
 )
 
 class RangeIndex(_IntIndexType):
-    def __new__(
+    def  __init__(
         cls,
         start: int | RangeIndex | range = ...,
         stop: int = ...,
