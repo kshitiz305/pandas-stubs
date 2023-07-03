@@ -896,7 +896,7 @@ def test_getitem() -> None:
     jkl = pd.RangeIndex(range(10))
     check(assert_type(jkl, pd.RangeIndex), pd.RangeIndex, int)
     check(assert_type(jkl[0], int), int)
-    check(assert_type(jkl[[0, 2, 4]], pd.Index), pd.Index, np.int64)
+    check(assert_type(jkl[[0, 2, 4]], pd.Index), pd.Index, np.integer)
 
     mi = pd.MultiIndex.from_product([["a", "b"], ["c", "d"]], names=["ab", "cd"])
     check(assert_type(mi, pd.MultiIndex), pd.MultiIndex)
