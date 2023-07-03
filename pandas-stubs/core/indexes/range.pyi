@@ -16,7 +16,7 @@ from pandas._typing import (
 )
 
 class RangeIndex(_IntIndexType):
-    def  __init__(
+    def __init__(
         cls,
         start: int | RangeIndex | range = ...,
         stop: int = ...,
@@ -25,7 +25,6 @@ class RangeIndex(_IntIndexType):
         copy: bool = ...,
         name=...,
     ): ...
-    
     @classmethod
     def from_range(cls, data, name=..., dtype=...): ...
     def __reduce__(self): ...
